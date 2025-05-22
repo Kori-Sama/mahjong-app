@@ -66,7 +66,19 @@ public:
     virtual int draw(cv::Mat& rgb, const std::vector<Object>& objects);
 };
 
+class YOLOv8_det_mahjong : public YOLOv8_det
+{
+public:
+    virtual int draw(cv::Mat& rgb, const std::vector<Object>& objects);
+};
+
 class YOLOv8_det_oiv7 : public YOLOv8_det
+{
+public:
+    virtual int draw(cv::Mat& rgb, const std::vector<Object>& objects);
+};
+
+class YOLOv8_det_mahjong : public YOLOv8_det
 {
 public:
     virtual int draw(cv::Mat& rgb, const std::vector<Object>& objects);
