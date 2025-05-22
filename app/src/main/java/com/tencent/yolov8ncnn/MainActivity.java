@@ -77,41 +77,41 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback
             }
         });
 
-        spinnerTask = (Spinner) findViewById(R.id.spinnerTask);
-        spinnerTask.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id)
-            {
-                if (position != current_task)
-                {
-                    current_task = position;
-                    reload();
-                }
-            }
+        // spinnerTask = (Spinner) findViewById(R.id.spinnerTask);
+        // spinnerTask.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        //     @Override
+        //     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id)
+        //     {
+        //         if (position != current_task)
+        //         {
+        //             current_task = position;
+        //             reload();
+        //         }
+        //     }
+        //
+        //     @Override
+        //     public void onNothingSelected(AdapterView<?> arg0)
+        //     {
+        //     }
+        // });
 
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0)
-            {
-            }
-        });
-
-        spinnerModel = (Spinner) findViewById(R.id.spinnerModel);
-        spinnerModel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id)
-            {
-                if (position != current_model)
-                {
-                    current_model = position;
-                    reload();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0)
-            {
-            }
-        });
+        // spinnerModel = (Spinner) findViewById(R.id.spinnerModel);
+        // spinnerModel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        //     @Override
+        //     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id)
+        //     {
+        //         if (position != current_model)
+        //         {
+        //             current_model = position;
+        //             reload();
+        //         }
+        //     }
+        //
+        //     @Override
+        //     public void onNothingSelected(AdapterView<?> arg0)
+        //     {
+        //     }
+        // });
 
         spinnerCPUGPU = (Spinner) findViewById(R.id.spinnerCPUGPU);
         spinnerCPUGPU.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

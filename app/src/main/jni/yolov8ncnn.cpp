@@ -185,31 +185,31 @@ JNIEXPORT jboolean JNICALL Java_com_tencent_yolov8ncnn_YOLOv8Ncnn_loadModel(JNIE
 
     __android_log_print(ANDROID_LOG_DEBUG, "ncnn", "loadModel %p", mgr);
 
-    const char* tasknames[6] =
-    {
-        "",
-        "_oiv7",
-        "_seg",
-        "_pose",
-        "_cls",
-        "_obb"
-    };
+    // const char* tasknames[6] =
+    // {
+    //     "",
+    //     "_oiv7",
+    //     "_seg",
+    //     "_pose",
+    //     "_cls",
+    //     "_obb"
+    // };
 
-    const char* modeltypes[9] =
-    {
-        "n",
-        "s",
-        "m",
-        "n",
-        "s",
-        "m",
-        "n",
-        "s",
-        "m"
-    };
+    // const char* modeltypes[9] =
+    // {
+    //     "n",
+    //     "s",
+    //     "m",
+    //     "n",
+    //     "s",
+    //     "m",
+    //     "n",
+    //     "s",
+    //     "m"
+    // };
 
-    std::string parampath = std::string("yolov8") + modeltypes[(int)modelid] + tasknames[(int)taskid] + ".ncnn.param";
-    std::string modelpath = std::string("yolov8") + modeltypes[(int)modelid] + tasknames[(int)taskid] + ".ncnn.bin";
+    std::string parampath = "best.param";
+    std::string modelpath = "best.bin";
     bool use_gpu = (int)cpugpu == 1;
     bool use_turnip = (int)cpugpu == 2;
 
@@ -244,21 +244,33 @@ JNIEXPORT jboolean JNICALL Java_com_tencent_yolov8ncnn_YOLOv8Ncnn_loadModel(JNIE
 
             if (!g_yolov8)
             {
-                if (taskid == 0) g_yolov8 = new YOLOv8_det_coco;
-                if (taskid == 1) g_yolov8 = new YOLOv8_det_oiv7;
-                if (taskid == 2) g_yolov8 = new YOLOv8_seg;
-                if (taskid == 3) g_yolov8 = new YOLOv8_pose;
-                if (taskid == 4) g_yolov8 = new YOLOv8_cls;
-                if (taskid == 5) g_yolov8 = new YOLOv8_obb;
+                // if (taskid == 0) g_yolov8 = new YOLOv8_det_coco;
+                // if (taskid == 1) g_yolov8 = new YOLOv8_det_oiv7;
+                // if (taskid == 2) g_yolov8 = new YOLOv8_seg;
+                // if (taskid == 3) g_yolov8 = new YOLOv8_pose;
+                // if (taskid == 4) g_yolov8 = new YOLOv8_cls;
+                // if (taskid == 5) g_yolov8 = new YOLOv8_obb;
+                if (parampath == "best.param") {
+                    g_yolov8 = new YOLOv8_det_mahjong;
+                } else {
+                    // Fallback or error handling if needed, for now, let's keep the old logic for other cases
+                    if (taskid == 0) g_yolov8 = new YOLOv8_det_coco;
+                    if (taskid == 1) g_yolov8 = new YOLOv8_det_oiv7;
+                    if (taskid == 2) g_yolov8 = new YOLOv8_seg;
+                    if (taskid == 3) g_yolov8 = new YOLOv8_pose;
+                    if (taskid == 4) g_yolov8 = new YOLOv8_cls;
+                    if (taskid == 5) g_yolov8 = new YOLOv8_obb;
+                }
+
 
                 g_yolov8->load(mgr, parampath.c_str(), modelpath.c_str(), use_gpu || use_turnip);
             }
-            int target_size = 320;
-            if ((int)modelid >= 3)
-                target_size = 480;
-            if ((int)modelid >= 6)
-                target_size = 640;
-            g_yolov8->set_det_target_size(target_size);
+            // int target_size = 320;
+            // if ((int)modelid >= 3)
+            //     target_size = 480;
+            // if ((int)modelid >= 6)
+            //     target_size = 640;
+            g_yolov8->set_det_target_size(640);
         }
     }
 

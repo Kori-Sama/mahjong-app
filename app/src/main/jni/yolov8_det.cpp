@@ -58,6 +58,16 @@
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <vector>
+#include <string>
+
+// Define mahjong class names
+static const std::vector<std::string> mahjong_class_names = {
+    "0b", "0m", "0p", "0s", "1m", "1p", "1s", "1z", "2m", "2p", "2s", "2z",
+    "3m", "3p", "3s", "3z", "4m", "4p", "4s", "4z", "5m", "5p", "5s", "5z",
+    "6m", "6p", "6s", "6z", "7m", "7p", "7s", "7z", "8m", "8p", "8s",
+    "9m", "9p", "9s"
+};
 
 static inline float intersection_area(const Object& a, const Object& b)
 {
@@ -313,7 +323,7 @@ int YOLOv8_det::detect(const cv::Mat& rgb, std::vector<Object>& objects)
 
     ncnn::Extractor ex = yolov8.create_extractor();
 
-    ex.input("in0", in_pad);
+    ex.input("images", in_pad);
 
     ncnn::Mat out;
     ex.extract("out0", out);
@@ -363,6 +373,45 @@ int YOLOv8_det::detect(const cv::Mat& rgb, std::vector<Object>& objects)
     } objects_area_greater;
     std::sort(objects.begin(), objects.end(), objects_area_greater);
 
+    return 0;
+}
+
+int YOLOv8_det_mahjong::draw(cv::Mat& rgb, const std::vector<Object>& objects)
+{
+    for (size_t i = 0; i < objects.size(); i++)
+    {
+        const Object& obj = objects[i];
+
+        cv::rectangle(rgb, obj.rect, cv::Scalar(0, 255, 0), 2); // Green rectangle
+
+        std::string label_text;
+        if (obj.label >= 0 && obj.label < mahjong_class_names.size())
+        {
+            label_text = mahjong_class_names[obj.label];
+        }
+        else
+        {
+            label_text = "Unknown"; // Or fallback to numeric like std::to_string(obj.label);
+        }
+
+        char text[256];
+        sprintf(text, "%s: %.2f", label_text.c_str(), obj.prob);
+
+        int baseLine = 0;
+        cv::Size label_size = cv::getTextSize(text, cv::FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseLine);
+        int x = obj.rect.x;
+        int y = obj.rect.y - label_size.height - baseLine;
+        if (y < 0)
+            y = 0;
+        if (x + label_size.width > rgb.cols)
+            x = rgb.cols - label_size.width;
+
+        cv::rectangle(rgb, cv::Rect(cv::Point(x, y), cv::Size(label_size.width, label_size.height + baseLine)),
+                      cv::Scalar(255, 255, 255), -1);
+
+        cv::putText(rgb, text, cv::Point(x, y + label_size.height),
+                    cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 0), 1);
+    }
     return 0;
 }
 
